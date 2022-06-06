@@ -1,6 +1,8 @@
 'use strict';
 
 const gridBBox = document.querySelector('.main-grid');
+const startBtn = document.querySelector('.start_button');
+const modalEl = document.querySelector('.modal');
 
 class GameObject {
   constructor(name, coords, isPlayable = false) {
@@ -28,6 +30,10 @@ class GridGameApp {
     // Adding Listeners
     document.addEventListener('keyup', this._keyboard.bind(this));
     document.addEventListener('keydown', this._keyDownWatch.bind(this));
+    startBtn.addEventListener('click', function () {
+      gridBBox.classList.remove('hidden');
+      modalEl.classList.add('hidden');
+    });
 
     this._createGameObject('pepe', true);
     this._createGameObject('Cheems');
