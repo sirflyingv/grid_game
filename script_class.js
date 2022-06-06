@@ -19,7 +19,7 @@ class GridGameApp {
   freeCellsIDArr = [];
   #gameObjects = [];
   #playableCharacter;
-  #turn = 0;
+  #turn = -2;
   constructor(height, width) {
     this.height = height;
     this.width = width;
@@ -104,6 +104,7 @@ class GridGameApp {
   }
 
   _update() {
+    this.#turn++;
     this.#cellsArr.forEach(div => (div.innerText = ''));
     this.#gameObjects.forEach(
       obj =>
@@ -117,6 +118,8 @@ class GridGameApp {
     ).innerHTML = `<img src="img/${this.#playableCharacter.name}_${
       this.#playableCharacter.lookDirection
     }.png">`;
+
+    console.log(this.#turn);
   }
 }
 
@@ -139,9 +142,3 @@ const createGame = function () {
 };
 
 startBtn.addEventListener('click', createGame);
-// const pepeGame = new GridGameApp(3, 4);
-// console.log(pepeGame);
-
-// pepeGame._createGameObject('pepe', true);
-// pepeGame._createGameObject('Cheems');
-// pepeGame._createGameObject('Wojak');
