@@ -64,7 +64,6 @@ class GridGameApp {
   }
 
   _keyboard(e) {
-    e.preventDefault();
     const char = this.#playableCharacter;
     let [x, y] = char.coords;
     if (e.key === 'ArrowUp' && x <= this.height && x > 1) {
@@ -93,7 +92,6 @@ class GridGameApp {
   }
 
   _keyDownWatch(e) {
-    e.preventDefault();
     const char = this.#playableCharacter;
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown')
       document.getElementById(
