@@ -41,21 +41,44 @@ body {
 }
 
 .start_menu {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 10px 10px;
+  justify-items: center;
 
   position: absolute;
-  margin-top: 200px;
-  width: 200px;
-  height: 150px;
+  padding: 15px;
+  margin-top: 600px;
+  width: 400px;
+  height: 250px;
   border-radius: 15px;
   background-color: burlywood;
 }
 
+.size_choice {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  align-items: center;
+}
+
+p {
+  justify-self: center;
+}
+
+.h_input {
+  width: 50px;
+  height: 30px;
+}
+.w_input {
+  width: 50px;
+  height: 30px;
+}
+
 .start_button {
-  width: auto;
+  width: 120px;
+  justify-self: center;
 }
 
 .hidden {

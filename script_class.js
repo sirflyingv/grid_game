@@ -30,10 +30,6 @@ class GridGameApp {
     // Adding Listeners
     document.addEventListener('keyup', this._keyboard.bind(this));
     document.addEventListener('keydown', this._keyDownWatch.bind(this));
-    startBtn.addEventListener('click', function () {
-      gridBBox.classList.remove('hidden');
-      modalEl.classList.add('hidden');
-    });
 
     this._createGameObject('pepe', true);
     this._createGameObject('Cheems');
@@ -124,7 +120,26 @@ class GridGameApp {
   }
 }
 
-const pepeGame = new GridGameApp(3, 4);
+const createGame = function () {
+  const validInputs = (...inputs) => inputs.every(inp => Number.isFinite(inp));
+  const allPositive = (...inputs) => inputs.every(inp => inp > 0);
+  const h_input = document.querySelector('.h_input');
+  const w_input = document.querySelector('.w_input');
+
+  const height = h_input.value ? +h_input.value : +h_input.placeholder;
+  const width = w_input.value ? +w_input.value : +w_input.placeholder;
+
+  if (!validInputs(height, width) || !allPositive(height, width))
+    return alert('Inputs have to be positive numbers');
+
+  gridBBox.classList.remove('hidden');
+  modalEl.classList.add('hidden');
+
+  const game = new GridGameApp(height, width);
+};
+
+startBtn.addEventListener('click', createGame);
+// const pepeGame = new GridGameApp(3, 4);
 // console.log(pepeGame);
 
 // pepeGame._createGameObject('pepe', true);
