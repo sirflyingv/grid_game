@@ -115,7 +115,7 @@ class GridGameApp {
 
     document.getElementById(
       `${char.coords.join('')}`
-    ).innerHTML = `<img src="/img/${char.name}/${char.name}_${char.lookDirection}.png">`;
+    ).innerHTML = `<img src="img/${char.name}/${char.name}_${char.lookDirection}.png">`;
 
     // console.log(this.#turn);
   }
