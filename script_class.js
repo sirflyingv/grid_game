@@ -28,8 +28,8 @@ class GridGameApp {
     this.freeCellsIDArr = this.#cellsIDArr;
 
     // Adding Listeners
-    document.addEventListener('keyup', this._keyboard.bind(this));
-    document.addEventListener('keydown', this._keyDownWatch.bind(this));
+    document.addEventListener('keyup', this._keyUpMove.bind(this));
+    document.addEventListener('keydown', this._keyDownEyesMove.bind(this));
 
     this._createGameObject('pepe', true);
     this._createGameObject('Cheems');
@@ -54,18 +54,17 @@ class GridGameApp {
     const idNum = Math.trunc(this.freeCellsIDArr.length * Math.random() + 1);
     const [x, y] = [...String(this.freeCellsIDArr[idNum - 1])];
     const id = Number(x + y);
-
     // deleting occupied cell ID
     this.freeCellsIDArr.splice(idNum - 1, 1);
     // Creating object
     const obj = new GameObject(name, [Number(x), Number(y)], isPlayable);
     if (isPlayable) this.#playableCharacter = obj;
     if (!isPlayable) this.#gameObjects.push(obj);
-    // console.log(obj);
+
     this._update();
   }
 
-  _keyboard(e) {
+  _keyUpMove(e) {
     const char = this.#playableCharacter;
     let [x, y] = char.coords;
     if (e.key === 'ArrowUp' && x <= this.height && x > 1) {
@@ -93,14 +92,14 @@ class GridGameApp {
     this._update();
   }
 
-  _keyDownWatch(e) {
+  _keyDownEyesMove(e) {
     const char = this.#playableCharacter;
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown')
       document.getElementById(
         `${char.coords.join('')}`
-      ).innerHTML = `<img src="img/${char.name}_${char.lookDirection}_${e.key
-        .slice(5)
-        .toLowerCase()}.png">`;
+      ).innerHTML = `<img src="img/${char.name}/${char.name}_${
+        char.lookDirection
+      }_${e.key.slice(5).toLowerCase()}.png">`;
   }
 
   _update() {
@@ -115,9 +114,9 @@ class GridGameApp {
 
     document.getElementById(
       `${this.#playableCharacter.coords.join('')}`
-    ).innerHTML = `<img src="img/${this.#playableCharacter.name}_${
-      this.#playableCharacter.lookDirection
-    }.png">`;
+    ).innerHTML = `<img src="/img/${this.#playableCharacter.name}/${
+      this.#playableCharacter.name
+    }_${this.#playableCharacter.lookDirection}.png">`;
 
     console.log(this.#turn);
   }
