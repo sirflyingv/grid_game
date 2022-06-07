@@ -118,7 +118,7 @@ class GridGameApp {
       this.#playableCharacter.name
     }_${this.#playableCharacter.lookDirection}.png">`;
 
-    console.log(this.#turn);
+    // console.log(this.#turn);
   }
 }
 
