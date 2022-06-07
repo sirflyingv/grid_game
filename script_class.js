@@ -103,6 +103,7 @@ class GridGameApp {
   }
 
   _update() {
+    const char = this.#playableCharacter;
     this.#turn++;
     this.#cellsArr.forEach(div => (div.innerText = ''));
     this.#gameObjects.forEach(
@@ -113,10 +114,8 @@ class GridGameApp {
     );
 
     document.getElementById(
-      `${this.#playableCharacter.coords.join('')}`
-    ).innerHTML = `<img src="/img/${this.#playableCharacter.name}/${
-      this.#playableCharacter.name
-    }_${this.#playableCharacter.lookDirection}.png">`;
+      `${char.coords.join('')}`
+    ).innerHTML = `<img src="/img/${char.name}/${char.name}_${char.lookDirection}.png">`;
 
     // console.log(this.#turn);
   }
