@@ -36,6 +36,10 @@ body {
   align-self: center; */
 }
 
+.left{
+  transform: scaleX(-1)
+}
+
 .modal {
   z-index: 20;
 }
