@@ -75,6 +75,8 @@ class GridGameApp {
   _createGameObject(name, isPlayable) {
     // Finding free cell
     const idNum = Math.trunc(this.freeCellsIDArr.length * Math.random() + 1);
+    console.log(idNum, this.freeCellsIDArr);
+    console.log(this.freeCellsIDArr[idNum - 1]);
     const [x, y] = [...String(this.freeCellsIDArr[idNum - 1])];
     const id = Number(x + y);
     // deleting occupied cell ID
@@ -170,8 +172,13 @@ const createGame = function () {
   const height = h_input.value ? +h_input.value : +h_input.placeholder;
   const width = w_input.value ? +w_input.value : +w_input.placeholder;
 
-  if (!validInputs(height, width) || !allPositive(height, width))
-    return alert('Inputs have to be positive numbers');
+  if (
+    !validInputs(height, width) ||
+    !allPositive(height, width) ||
+    height > 9 ||
+    width > 9
+  )
+    return alert('Inputs have to be positive numbers from 1 to 9');
 
   gridBBox.classList.remove('hidden');
   modalEl.classList.add('hidden');
