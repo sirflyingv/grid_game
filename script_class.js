@@ -36,6 +36,13 @@ class GameObject {
   }
 }
 
+class Field {
+  constructor(width, height) {
+    this.height = height;
+    this.width = width;
+  }
+}
+
 class GridGameApp {
   #cellsArr = [];
   #cellsIDArr = [];
@@ -64,6 +71,7 @@ class GridGameApp {
       for (let w = 1; w <= this.width; w++) {
         const div = document.createElement('div');
         div.classList.add('cell-0');
+        // problematic thing ⬇
         div.id = `${h}${w}`;
         this.#cellsArr.push(div);
         this.#cellsIDArr.push(+div.id);
