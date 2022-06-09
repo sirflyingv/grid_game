@@ -92,6 +92,7 @@ class GridGameApp {
   _keyUpMove(e) {
     const char = this.#playableCharacter;
     let [x, y] = char.coords;
+
     if (e.key === 'ArrowUp' && x <= this.height && x > 1) {
       char.coords[0]--;
     }
@@ -104,6 +105,7 @@ class GridGameApp {
         ? char.coords[1]++
         : (char.lookDirection = 'right');
 
+    //  just turning right (when facing wall to left)
     if (e.key === 'ArrowRight') char.lookDirection = 'right';
 
     if (e.key === 'ArrowLeft' && y === 1) char.lookDirection = 'left';
@@ -122,9 +124,16 @@ class GridGameApp {
     const char = this.#playableCharacter;
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       document.getElementById(`${char.coords.join('')}`).firstChild.remove();
+      // getting correct pic using last letters of e.key
+      const lookUpDownPic = char.pics[`look${e.key.slice(5)}`];
+      // settling CSS class "left" according to LookDirection
+      char.lookDirection === 'left'
+        ? lookUpDownPic.classList.add('left')
+        : lookUpDownPic.classList.remove('left');
+      // appeing pic that looks up or down
       document
         .getElementById(`${char.coords.join('')}`)
-        .appendChild(char.pics[`look${e.key.slice(5)}`]);
+        .appendChild(lookUpDownPic);
     }
   }
 
@@ -167,7 +176,7 @@ const createGame = function () {
   gridBBox.classList.remove('hidden');
   modalEl.classList.add('hidden');
 
-  const game = new GridGameApp(height, width);
+  return new GridGameApp(height, width);
 };
 
 startBtn.addEventListener('click', createGame);
