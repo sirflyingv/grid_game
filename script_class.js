@@ -10,7 +10,7 @@ class GameObject {
     this.name = name;
     this.coords = coords;
     this.isPlayable = isPlayable;
-    this.pics = this._buildElements(name) 
+    this.pics = this._buildElements(name);
   }
 
   _buildElements(name) {
@@ -23,16 +23,16 @@ class GameObject {
     const lookDown = document.createElement('img');
     lookDown.src = `img/${name}/${name}_down.png`;
 
-    const rest= document.createElement('img');
+    const rest = document.createElement('img');
     rest.src = `img/${name}/${name}_rest.png`;
 
     const pics = {
       defaultPose: defaultPose,
       lookUp: lookUp,
       lookDown: lookDown,
-      rest:rest
-    }
-   return pics
+      rest: rest,
+    };
+    return pics;
   }
 }
 
@@ -84,8 +84,7 @@ class GridGameApp {
     if (isPlayable) this.#playableCharacter = obj;
     if (!isPlayable) this.#gameObjects.push(obj);
 
-    // console.log(obj.pics.lookUp);
-    
+    console.log(obj);
 
     this._update();
   }
@@ -100,45 +99,34 @@ class GridGameApp {
       char.coords[0]++;
     }
 
-    if (e.key === 'ArrowRight' && y < this.width && y > 0) {
+    if (e.key === 'ArrowRight' && y < this.width && y > 0)
       char.lookDirection === 'right'
         ? char.coords[1]++
-        : (char.pics.defaultPose.classList.remove('left'))
-        // : (char.lookDirection = 'right');
-    }
-    if (e.key === 'ArrowRight' && y === this.width)
-    char.pics.defaultPose.classList.remove('left');
-      // char.lookDirection = 'right';
+        : (char.lookDirection = 'right');
 
-    if (e.key === 'ArrowLeft' && y <= this.width && y > 1) {
+    if (e.key === 'ArrowRight') char.lookDirection = 'right';
+
+    if (e.key === 'ArrowLeft' && y === 1) char.lookDirection = 'left';
+
+    if (e.key === 'ArrowLeft' && y <= this.width && y > 1)
       char.lookDirection === 'left'
         ? char.coords[1]--
-        : (char.pics.defaultPose.classList.add('left'))
-        // : (char.lookDirection = 'left');
-    }
+        : (char.lookDirection = 'left');
+
     if (e.key === 'ArrowLeft' && y === 1) char.lookDirection = 'left';
-    // console.log(this.#playableCharacter);
+
     this._update();
   }
 
   _keyDownEyesMove(e) {
     const char = this.#playableCharacter;
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-    document.getElementById(
-      `${char.coords.join('')}`
-      ).re
-
-      document.getElementById(
-        `${char.coords.join('')}`
-        ).appendChild(char.pics[`look${e.key.slice(5)}`])
-        // document.getElementById(
-        //   `${char.coords.join('')}`
-        // ).innerHTML = `<img src="img/${char.name}/${char.name}_${
-        //   char.lookDirection
-        // }_${e.key.slice(5).toLowerCase()}.png">`;
-      
-      }
+      document.getElementById(`${char.coords.join('')}`).firstChild.remove();
+      document
+        .getElementById(`${char.coords.join('')}`)
+        .appendChild(char.pics[`look${e.key.slice(5)}`]);
     }
+  }
 
   _update() {
     const char = this.#playableCharacter;
@@ -151,13 +139,14 @@ class GridGameApp {
         ).innerText = `${obj.name}`)
     );
 
-    // document.getElementById(
-    //   `${char.coords.join('')}`
-    // ).innerHTML = `<img src="img/${char.name}/${char.name}_${char.lookDirection}.png">`;
+    if (char.lookDirection === 'left')
+      char.pics.defaultPose.classList.add('left');
+    if (char.lookDirection === 'right')
+      char.pics.defaultPose.classList.remove('left');
 
-    document.getElementById(
-      `${char.coords.join('')}`
-    ).appendChild(char.pics.defaultPose)
+    document
+      .getElementById(`${char.coords.join('')}`)
+      .appendChild(char.pics.defaultPose);
 
     // console.log(this.#turn);
   }
