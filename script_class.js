@@ -36,29 +36,6 @@ class GameObject {
   }
 }
 
-// class Field {
-//   field = [];
-//   constructor(width, height) {
-//     this.height = height;
-//     this.width = width;
-//   }
-
-//   createField() {
-//     gridBBox.style.cssText += `grid-template-columns: repeat(${this.width}, 1fr)`;
-//     for (let h = 0; h <= this.height - 1; h++) {
-//       this.field.push([]);
-//       for (let w = 0; w <= this.width - 1; w++) {
-//         const div = document.createElement('div');
-//         div.classList.add('cell-0');
-//         this.field[h].push(div);
-//         div.innerText = `${w + 1}${h + 1}`;
-//         gridBBox.append(div);
-//       }
-//     }
-//     console.log(this.field);
-//   }
-// }
-
 class GridGameApp {
   field = [];
   #cellsArr = [];
@@ -149,7 +126,7 @@ class GridGameApp {
   }
 
   _keyDownEyesMove(e) {
-    if (e.key === 'F5') return;
+    if (e.key === 'F5' || e.key === 'F12') return;
     e.preventDefault();
     const char = this.#playableCharacter;
     const [x, y] = char.coords;
@@ -183,7 +160,7 @@ class GridGameApp {
 
     this.field[x - 1][y - 1].appendChild(char.pics.defaultPose);
 
-    // from internet⬇
+    // from internet⬇ checkiing if player is in viewport
     function isElementInViewport(el) {
       const rect = el.getBoundingClientRect();
       return (
@@ -195,6 +172,7 @@ class GridGameApp {
           (window.innerWidth || document.documentElement.clientWidth)
       );
     }
+    // if player is out of viewport, scroll to player
     if (!isElementInViewport(char.pics.defaultPose))
       char.pics.defaultPose.scrollIntoView({
         block: 'center',
