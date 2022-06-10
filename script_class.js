@@ -106,8 +106,15 @@ class GridGameApp {
     const obj = new GameObject(name, coords, isPlayable);
     if (isPlayable) this.#playableCharacter = obj;
     if (!isPlayable) this.#gameObjects.push(obj);
+    console.log(obj);
 
     this._update();
+    // scrolling to player
+    this.#playableCharacter.pics.defaultPose.scrollIntoView({
+      block: 'center',
+      behavior: 'smooth',
+      inline: 'center',
+    });
   }
 
   _keyUpMove(e) {
@@ -142,6 +149,8 @@ class GridGameApp {
   }
 
   _keyDownEyesMove(e) {
+    if (e.key === 'F5') return;
+    e.preventDefault();
     const char = this.#playableCharacter;
     const [x, y] = char.coords;
 
@@ -173,6 +182,25 @@ class GridGameApp {
       char.pics.defaultPose.classList.remove('left');
 
     this.field[x - 1][y - 1].appendChild(char.pics.defaultPose);
+
+    // from internet⬇
+    function isElementInViewport(el) {
+      const rect = el.getBoundingClientRect();
+      return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <=
+          (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <=
+          (window.innerWidth || document.documentElement.clientWidth)
+      );
+    }
+    if (!isElementInViewport(char.pics.defaultPose))
+      char.pics.defaultPose.scrollIntoView({
+        block: 'center',
+        behavior: 'smooth',
+        inline: 'center',
+      });
 
     // console.log(this.#turn);
   }
