@@ -36,8 +36,8 @@ body {
   align-self: center; */
 }
 
-.left{
-  transform: scaleX(-1)
+.left {
+  transform: scaleX(-1);
 }
 
 .modal {
@@ -50,6 +50,7 @@ body {
   grid-template-rows: 1fr 1fr 1fr;
   gap: 10px 10px;
   justify-items: center;
+  align-items: center;
 
   position: absolute;
   padding: 15px;
@@ -63,7 +64,7 @@ body {
 .size_choice {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   align-items: center;
 }
 
