@@ -36,7 +36,31 @@ class GameObject {
   }
 }
 
+// class Field {
+//   field = [];
+//   constructor(width, height) {
+//     this.height = height;
+//     this.width = width;
+//   }
+
+//   createField() {
+//     gridBBox.style.cssText += `grid-template-columns: repeat(${this.width}, 1fr)`;
+//     for (let h = 0; h <= this.height - 1; h++) {
+//       this.field.push([]);
+//       for (let w = 0; w <= this.width - 1; w++) {
+//         const div = document.createElement('div');
+//         div.classList.add('cell-0');
+//         this.field[h].push(div);
+//         div.innerText = `${w + 1}${h + 1}`;
+//         gridBBox.append(div);
+//       }
+//     }
+//     console.log(this.field);
+//   }
+// }
+
 class GridGameApp {
+  field = [];
   #cellsArr = [];
   #cellsIDArr = [];
   freeCellsIDArr = [];
@@ -49,6 +73,7 @@ class GridGameApp {
     this.mapSize = [this.height, this.width];
     this._composeField();
     this.freeCellsIDArr = this.#cellsIDArr;
+    this.freeCellsArr = this.#cellsArr;
 
     // Adding Listeners
     document.addEventListener('keyup', this._keyUpMove.bind(this));
@@ -61,34 +86,35 @@ class GridGameApp {
   _composeField() {
     gridBBox.style.cssText += `grid-template-columns: repeat(${this.width}, 1fr)`;
     for (let h = 1; h <= this.height; h++) {
+      this.field.push([]);
       for (let w = 1; w <= this.width; w++) {
         const div = document.createElement('div');
         div.classList.add('cell-0');
-        div.id = `${h}${w}`;
-        this.#cellsArr.push(div);
-        this.#cellsIDArr.push(+div.id);
+        this.field[h - 1].push(div);
+        // div.innerText = `${h}${w}`;
+        this.#cellsArr.push([h, w]);
+        gridBBox.append(div);
       }
     }
-    this.#cellsArr.forEach(e => gridBBox.append(e));
-    // console.log(this.#cellsArr);
   }
   _createGameObject(name, isPlayable) {
-    // Finding free cell
-    const idNum = Math.trunc(this.freeCellsIDArr.length * Math.random() + 1);
-    console.log(idNum, this.freeCellsIDArr);
-    console.log(this.freeCellsIDArr[idNum - 1]);
-    const [x, y] = [...String(this.freeCellsIDArr[idNum - 1])];
-    const id = Number(x + y);
+    const idNum = Math.trunc(this.freeCellsArr.length * Math.random() + 1);
+    const coords = this.#cellsArr[idNum - 1];
     // deleting occupied cell ID
-    this.freeCellsIDArr.splice(idNum - 1, 1);
+    this.freeCellsArr.splice(idNum - 1, 1);
     // Creating object
-    const obj = new GameObject(name, [Number(x), Number(y)], isPlayable);
+    const obj = new GameObject(name, coords, isPlayable);
     if (isPlayable) this.#playableCharacter = obj;
     if (!isPlayable) this.#gameObjects.push(obj);
-
     console.log(obj);
 
     this._update();
+    // scrolling to player
+    this.#playableCharacter.pics.defaultPose.scrollIntoView({
+      block: 'center',
+      behavior: 'smooth',
+      inline: 'center',
+    });
   }
 
   _keyUpMove(e) {
@@ -123,9 +149,13 @@ class GridGameApp {
   }
 
   _keyDownEyesMove(e) {
+    if (e.key === 'F5') return;
+    e.preventDefault();
     const char = this.#playableCharacter;
+    const [x, y] = char.coords;
+
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-      document.getElementById(`${char.coords.join('')}`).firstChild.remove();
+      this.field[x - 1][y - 1].firstChild.remove();
       // getting correct pic using last letters of e.key
       const lookUpDownPic = char.pics[`look${e.key.slice(5)}`];
       // settling CSS class "left" according to LookDirection
@@ -133,31 +163,44 @@ class GridGameApp {
         ? lookUpDownPic.classList.add('left')
         : lookUpDownPic.classList.remove('left');
       // appeing pic that looks up or down
-      document
-        .getElementById(`${char.coords.join('')}`)
-        .appendChild(lookUpDownPic);
+      this.field[x - 1][y - 1].appendChild(lookUpDownPic);
     }
   }
 
   _update() {
     const char = this.#playableCharacter;
-    this.#turn++;
-    this.#cellsArr.forEach(div => (div.innerText = ''));
-    this.#gameObjects.forEach(
-      obj =>
-        (document.getElementById(
-          `${obj.coords.join('')}`
-        ).innerText = `${obj.name}`)
-    );
+    const [x, y] = char.coords;
+    this.field.forEach(line => {
+      line.forEach(cell => {
+        if (cell.firstChild) cell.firstChild.remove();
+      });
+    });
 
     if (char.lookDirection === 'left')
       char.pics.defaultPose.classList.add('left');
     if (char.lookDirection === 'right')
       char.pics.defaultPose.classList.remove('left');
 
-    document
-      .getElementById(`${char.coords.join('')}`)
-      .appendChild(char.pics.defaultPose);
+    this.field[x - 1][y - 1].appendChild(char.pics.defaultPose);
+
+    // from internet⬇
+    function isElementInViewport(el) {
+      const rect = el.getBoundingClientRect();
+      return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <=
+          (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <=
+          (window.innerWidth || document.documentElement.clientWidth)
+      );
+    }
+    if (!isElementInViewport(char.pics.defaultPose))
+      char.pics.defaultPose.scrollIntoView({
+        block: 'center',
+        behavior: 'smooth',
+        inline: 'center',
+      });
 
     // console.log(this.#turn);
   }
@@ -172,13 +215,8 @@ const createGame = function () {
   const height = h_input.value ? +h_input.value : +h_input.placeholder;
   const width = w_input.value ? +w_input.value : +w_input.placeholder;
 
-  if (
-    !validInputs(height, width) ||
-    !allPositive(height, width) ||
-    height > 9 ||
-    width > 9
-  )
-    return alert('Inputs have to be positive numbers from 1 to 9');
+  if (!validInputs(height, width) || !allPositive(height, width))
+    return alert('Inputs have to be positive numbers');
 
   gridBBox.classList.remove('hidden');
   modalEl.classList.add('hidden');
