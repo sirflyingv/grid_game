@@ -187,11 +187,11 @@ class GridGameApp {
 const createGame = function () {
   const validInputs = (...inputs) => inputs.every(inp => Number.isFinite(inp));
   const allPositive = (...inputs) => inputs.every(inp => inp > 0);
-  const h_input = document.querySelector('.h_input');
-  const w_input = document.querySelector('.w_input');
+  const hInput = document.querySelector('.h_input');
+  const wInput = document.querySelector('.w_input');
 
-  const height = h_input.value ? +h_input.value : +h_input.placeholder;
-  const width = w_input.value ? +w_input.value : +w_input.placeholder;
+  const height = hInput.value ? +hInput.value : +hInput.placeholder;
+  const width = wInput.value ? +wInput.value : +wInput.placeholder;
 
   if (!validInputs(height, width) || !allPositive(height, width))
     return alert('Inputs have to be positive numbers');
